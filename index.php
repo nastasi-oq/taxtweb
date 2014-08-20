@@ -1,9 +1,10 @@
 <?php 
 $menu_content = "";
+$sub1menu_content = "";
 $type_of_assessment = "";
 function main()
 {
-    GLOBAL $menu_content, $type_of_assessment, $_GET;
+    GLOBAL $menu_content, $sub1menu_content, $type_of_assessment, $sub1tas, $_GET;
 
     if (isset($_GET['type_of_assessment'])) {
         $type_of_assessment = (int)$_GET['type_of_assessment'];
@@ -27,6 +28,21 @@ function main()
             $menu_content .= sprintf('<li id="menu_id-%d" class="vuln_menu" onclick="menu_set(this);">%s</li>', $i+1, $desc[$i]);
         }
     }
+
+
+    $desc = array('Sub1Fragility', 'Sub2Fragility', 'Sub3Fragility', 'Sub4Fragility');
+    for ($i = 0 ; $i < count($desc) ; $i++) {
+        if (!isset($sub1tas)) {
+            $sub1tas = 1;
+        }
+        if ($i + 1 == $sub1tas) {
+            $sub1menu_content .= sprintf('<li id="sub1menu_id-%d" class="vuln_menu_selected" onclick="sub1menu_set(this);">%s</li>', $i+1, $desc[$i]);
+        }
+        else {
+            $sub1menu_content .= sprintf('<li id="sub1menu_id-%d" class="vuln_menu" onclick="sub1menu_set(this);">%s</li>', $i+1, $desc[$i]);
+        }
+    }
+
 
     
 }
@@ -56,6 +72,7 @@ li.vuln_menu {
     color: black;
     margin: 0px;
     padding: 8px;
+    cursor: pointer; 
 }
 
 li.vuln_menu_selected {
@@ -66,6 +83,7 @@ li.vuln_menu_selected {
     padding: 8px;
     border: 1px solid #1b75a7;
     border-bottom: 1px solid white;
+    cursor: pointer; 
 }
 
 a.vuln_menu
@@ -82,7 +100,7 @@ a.vuln_menu:hover {
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript"><!--
-    function menu_set(id_or_obj) {
+function menu_set(id_or_obj) {
     var menu_items;
 
     console.log("xx" + typeof(id_or_obj));
@@ -115,6 +133,41 @@ a.vuln_menu:hover {
     }
 }
 
+function sub1menu_set(id_or_obj) {
+    var menu_items;
+
+    console.log("xx " + typeof(id_or_obj));
+    if (typeof(id_or_obj) == 'object') {
+        id = id_or_obj.id;
+    }
+    else if (typeof(id_or_obj) == 'number') { 
+        id = "sub1menu_id-" + id_or_obj;
+    }
+    console.log("yy " + id);
+
+    menu_items = $('[id|="sub1menu_id"]');
+        console.log("zz " + menu_items);
+    
+    
+    for (i = 0 ; i < menu_items.length ; i++) {
+        console.log("zz" + menu_items[i].id);
+        if (menu_items[i].id == id) {
+            
+            $(menu_items[i]).removeClass("vuln_menu");
+            $(menu_items[i]).addClass("vuln_menu_selected");
+            // FIXME
+            console.log("WW "+"sub1main_content-"+(i+1));
+            $("#sub1main_content-"+(i+1)).css('display', '');
+        }
+        else {
+            console.log("ww "+"sub1main_content-"+(i+1));
+            $(menu_items[i]).removeClass("vuln_menu_selected");
+            $(menu_items[i]).addClass("vuln_menu");
+            $("#sub1main_content-"+(i+1)).css('display', 'none');
+        }
+    }
+}
+
 window.onload = function () {
     var menu_cur = <?php echo $type_of_assessment; ?>;
     menu_set(menu_cur);
@@ -127,19 +180,39 @@ window.onload = function () {
 <ul class="vuln_menu">
     <?php echo "$menu_content"; ?>
 </ul>
-<div id="main_content_parent" style="position: relative; height: 800px; background-color: blue;">
-<div id="main_content-1" style="position: absolute; display: none; top: 0px; width: 400px; height: 200px; background-color: red;">
-red
+    <div id="main_content_parent" style="position: relative; width: 800px; height: 650px; background-color: #ccccff; /* blue */">
+    <div id="main_content-1" style="position: absolute; display: none; top: 0px; width: 800px; height: 500px; background-color: #ffcccc; /*red */">
+<ul class="vuln_menu">
+    <?php echo "$sub1menu_content"; ?>
+</ul>
+
+<div id="sub1main_content-1" style="position: absolute; display: none; top: 50px; width: 700px; height: 400px; background-color: #c0c0c0;">
+</div>
+<div id="sub1main_content-2" style="position: absolute; display: none; top: 50px; width: 700px; height: 400px; background-color: #a0a0a0;">
 </div>
 
-<div id="main_content-2" style="position: absolute; display: none; top: 0px; width: 400px; height: 300px; background-color: green;">
+<div id="sub1main_content-3" style="position: absolute; display: none; top: 50px; width: 700px; height: 400px; background-color: #808080;">
+</div>
+
+<div id="sub1main_content-4" style="position: absolute; display: none; top: 50px; width: 700px; height: 400px; background-color: #606060;">
+</div>
+
+</div>
+
+    <div id="main_content-2" style="position: absolute; display: none; top: 0px; width: 800px; height: 500px; background-color: #ccffcc; /* green */">
 green
 </div>
-<div id="main_content-3" style="position: absolute; display: none; top: 0px; width: 400px; height: 300px; background-color: pink;">
-pink
+    <div id="main_content-3" style="position: absolute; display: none; top: 0px; width: 800px; height: 500px; background-color: #ffe6cc; /* orange */">
+orange
 </div>
-<div id="main_content-4" style="position: absolute; display: none; top: 0px; width: 400px; height: 300px; background-color: violet;">
+    <div id="main_content-4" style="position: absolute; display: none; top: 0px; width: 800px; height: 500px; background-color: #ffccff; /*violet*/">
 violet
+</div>
+
+<div style="position: absolute; bottom: 0px; margin: 8px;" >
+    <p>Taxonomy string for this building typology: </p>
+    <p><input id="taxonomy" type="text"></input></p>
+    <p><input id="omit_unkown" type="checkbox">Omit code if corresponding parameter in unknown</p>
 </div>
     <div>
 <h1></h1>
