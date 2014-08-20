@@ -1,6 +1,7 @@
 <?php 
 $menu_content = "";
 $sub1menu_content = "";
+$sub1tas = "";
 $type_of_assessment = "";
 function main()
 {
@@ -16,11 +17,18 @@ function main()
         $type_of_assessment = 1;
     }
 
-    $desc = array('Fragility', 'Vulnerability', 'Damage-to-loss', 'Capacity curve');
-    for ($i = 0 ; $i < count($desc) ; $i++) {
-        if (!isset($type_of_assessment)) {
-            $type_of_assessment = 1;
+    if (isset($_GET['sub1tas'])) {
+        $sub1tas = (int)$_GET['sub1tas'];
+        if ($sub1tas < 1  || $sub1tas > 2) {
+            $sub1tas = 1;
         }
+    }
+    else { 
+        $sub1tas = 1;
+    }
+
+    $desc = array('Structural System', 'Label2', 'Label3', 'Label4');
+    for ($i = 0 ; $i < count($desc) ; $i++) {
         if ($i + 1 == $type_of_assessment) {
             $menu_content .= sprintf('<li id="menu_id-%d" class="vuln_menu_selected" onclick="menu_set(this);">%s</li>', $i+1, $desc[$i]);
         }
@@ -30,16 +38,13 @@ function main()
     }
 
 
-    $desc = array('Sub1Fragility', 'Sub2Fragility', 'Sub3Fragility', 'Sub4Fragility');
-    for ($i = 0 ; $i < count($desc) ; $i++) {
-        if (!isset($sub1tas)) {
-            $sub1tas = 1;
-        }
+    $sub1desc = array('Direction X', 'Direction Y');
+    for ($i = 0 ; $i < count($sub1desc) ; $i++) {
         if ($i + 1 == $sub1tas) {
-            $sub1menu_content .= sprintf('<li id="sub1menu_id-%d" class="vuln_menu_selected" onclick="sub1menu_set(this);">%s</li>', $i+1, $desc[$i]);
+            $sub1menu_content .= sprintf('<li id="sub1menu_id-%d" class="vuln_menu_selected" onclick="sub1menu_set(this);">%s</li>', $i+1, $sub1desc[$i]);
         }
         else {
-            $sub1menu_content .= sprintf('<li id="sub1menu_id-%d" class="vuln_menu" onclick="sub1menu_set(this);">%s</li>', $i+1, $desc[$i]);
+            $sub1menu_content .= sprintf('<li id="sub1menu_id-%d" class="vuln_menu" onclick="sub1menu_set(this);">%s</li>', $i+1, $sub1desc[$i]);
         }
     }
 
@@ -102,6 +107,7 @@ a.vuln_menu:hover {
 <script type="text/javascript"><!--
 function menu_set(id_or_obj) {
     var menu_items;
+    var submenu_cur = 1;
 
     console.log("xx" + typeof(id_or_obj));
     if (typeof(id_or_obj) == 'object') {
@@ -109,6 +115,11 @@ function menu_set(id_or_obj) {
     }
     else if (typeof(id_or_obj) == 'number') { 
         id = "menu_id-" + id_or_obj;
+        console.log("QUI: "+id+ " "+arguments.length);
+        if (arguments.length > 1) {
+        console.log("QUA: "+arguments[1]);
+            submenu_cur = arguments[1];
+        }
     }
     console.log("yy" + id);
 
@@ -130,6 +141,9 @@ function menu_set(id_or_obj) {
             $(menu_items[i]).addClass("vuln_menu");
             $("#main_content-"+(i+1)).css('display', 'none');
         }
+    }
+    if (typeof(id_or_obj) == 'number' && id == "menu_id-1") {
+        sub1menu_set(submenu_cur);
     }
 }
 
@@ -170,7 +184,8 @@ function sub1menu_set(id_or_obj) {
 
 window.onload = function () {
     var menu_cur = <?php echo $type_of_assessment; ?>;
-    menu_set(menu_cur);
+    var sub1menu_cur = <?php echo $sub1tas; ?>;
+    menu_set(menu_cur, sub1menu_cur);
 }
 //-->
 </script>
