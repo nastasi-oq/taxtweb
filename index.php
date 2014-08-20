@@ -88,8 +88,7 @@ li.vuln_menu_selected {
     cursor: pointer; 
 }
 
-a.vuln_menu
-{
+a.vuln_menu {
     width:6em;
     color: #1b75a7;
     padding:0.2em 0.6em;
@@ -97,6 +96,16 @@ a.vuln_menu
 
 a.vuln_menu:hover {
     text-decoration:underline;
+}
+
+table.dir_spec {
+    margin: auto;
+    width: 90%;
+}
+
+table.dir_spec td {
+    text-align: center;
+    width: 50%;
 }
 </style>
 
@@ -201,9 +210,9 @@ window.onload = function () {
 </head>
 
 <body>
-<ul class="vuln_menu">
-    <?php echo "$menu_content"; ?>
-</ul>
+    <ul class="vuln_menu">
+        <?php echo "$menu_content"; ?>
+    </ul>
     <div id="main_content_parent" style="position: relative; width: 800px; height: 650px; background-color: #ccccff; /* blue */">
         <div id="main_content-1" style="position: absolute; display: none; top: 0px; width: 800px; height: 500px; background-color: #ffcccc; /*red */">
             <ul class="vuln_menu">
@@ -211,18 +220,19 @@ window.onload = function () {
             </ul>
 
             <div id="sub1_content-1" style="position: absolute; display: none; top: 50px; width: 700px; height: 400px; background-color: #c0c0c0;">
-                <dir style="border:1px solid gray; margin: 4px;">
+                <div style="border:1px solid gray; margin: 4px;">
                     <h4>Direction specification:</h4>
-                    <table style="width: 100%; margin: 8px;"><tr>
+                    <table class="dir_spec"><tr>
                         <td><input type="radio" id="sub1_xdir_unspec" name="sub1_xdir" checked value="unspec" onclick="sub1_dir_set(this);">Unspecified direction</td>
                         <td><input type="radio" id="sub1_xdir_spec" name="sub1_xdir" value="spec" onclick="sub1_dir_set(this);">Parallel to street</td>
                     </tr></table>
+                </div>
             </div>
             <div id="sub1_content-2" style="position: absolute; display: none; top: 50px; width: 700px; height: 400px; background-color: #a0a0a0;">
 
-                <dir style="border:1px solid gray; margin: 4px;">
+                <div style="border:1px solid gray; margin: 4px;">
                     <h4>Direction specification:</h4>
-                    <table style="width: 100%; margin: 8px;"><tr>
+                    <table class="dir_spec"><tr>
                         <td><input type="radio" id="sub1_ydir_unspec" name="sub1_ydir" checked value="unspec" onclick="sub1_dir_set(this);">Unspecified direction</td>
                         <td><input type="radio" id="sub1_ydir_spec" name="sub1_ydir" value="spec" onclick="sub1_dir_set(this);">Perpendicular to street</td>
                     </tr></table>
@@ -238,14 +248,14 @@ orange
             <div id="main_content-4" style="position: absolute; display: none; top: 0px; width: 800px; height: 500px; background-color: #ffccff; /*violet*/">
 violet
             </div>
-            <div style="position: absolute; bottom: 0px; margin: 8px;" >
-                <p>Taxonomy string for this building typology: </p>
-                <p><input id="taxonomy" type="text"></input></p>
-                <p><input id="omit_unkown" type="checkbox">Omit code if corresponding parameter in unknown</p>
-           </div>
-      </div>
-</div>
-<h1></h1>
+        </div>
+        <div style="position: absolute; bottom: 0px; margin: 8px;" >
+            <p>Taxonomy string for this building typology: </p>
+            <p><input id="taxonomy" type="text" size="80" maxlength="120"></input></p>
+            <p><input id="omit_unkown" type="checkbox">Omit code if corresponding parameter is unknown</p>
+        </div>
+    </div>
+    <h1></h1>
 
 
 
