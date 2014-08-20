@@ -47,9 +47,6 @@ function main()
             $sub1menu_content .= sprintf('<li id="sub1menu_id-%d" class="vuln_menu" onclick="sub1menu_set(this);">%s</li>', $i+1, $sub1desc[$i]);
         }
     }
-
-
-    
 }
 
 main();
@@ -170,17 +167,29 @@ function sub1menu_set(id_or_obj) {
             $(menu_items[i]).removeClass("vuln_menu");
             $(menu_items[i]).addClass("vuln_menu_selected");
             // FIXME
-            console.log("WW "+"sub1main_content-"+(i+1));
-            $("#sub1main_content-"+(i+1)).css('display', '');
+            console.log("WW "+"sub1_content-"+(i+1));
+            $("#sub1_content-"+(i+1)).css('display', '');
         }
         else {
-            console.log("ww "+"sub1main_content-"+(i+1));
+            console.log("ww "+"sub1_content-"+(i+1));
             $(menu_items[i]).removeClass("vuln_menu_selected");
             $(menu_items[i]).addClass("vuln_menu");
-            $("#sub1main_content-"+(i+1)).css('display', 'none');
+            $("#sub1_content-"+(i+1)).css('display', 'none');
         }
     }
 }
+
+function sub1_dir_set(obj) {
+    if (obj.name == "sub1_xdir") {
+        $("#sub1_ydir_"+obj.value).prop("checked", true);
+    }
+    else if (obj.name == "sub1_ydir") {
+        $("#sub1_xdir_"+obj.value).prop("checked", true);
+    }
+
+    return true;
+}
+
 
 window.onload = function () {
     var menu_cur = <?php echo $type_of_assessment; ?>;
@@ -196,40 +205,46 @@ window.onload = function () {
     <?php echo "$menu_content"; ?>
 </ul>
     <div id="main_content_parent" style="position: relative; width: 800px; height: 650px; background-color: #ccccff; /* blue */">
-    <div id="main_content-1" style="position: absolute; display: none; top: 0px; width: 800px; height: 500px; background-color: #ffcccc; /*red */">
-<ul class="vuln_menu">
-    <?php echo "$sub1menu_content"; ?>
-</ul>
+        <div id="main_content-1" style="position: absolute; display: none; top: 0px; width: 800px; height: 500px; background-color: #ffcccc; /*red */">
+            <ul class="vuln_menu">
+                <?php echo "$sub1menu_content"; ?>
+            </ul>
 
-<div id="sub1main_content-1" style="position: absolute; display: none; top: 50px; width: 700px; height: 400px; background-color: #c0c0c0;">
-</div>
-<div id="sub1main_content-2" style="position: absolute; display: none; top: 50px; width: 700px; height: 400px; background-color: #a0a0a0;">
-</div>
+            <div id="sub1_content-1" style="position: absolute; display: none; top: 50px; width: 700px; height: 400px; background-color: #c0c0c0;">
+                <dir style="border:1px solid gray; margin: 4px;">
+                    <h4>Direction specification:</h4>
+                    <table style="width: 100%; margin: 8px;"><tr>
+                        <td><input type="radio" id="sub1_xdir_unspec" name="sub1_xdir" checked value="unspec" onclick="sub1_dir_set(this);">Unspecified direction</td>
+                        <td><input type="radio" id="sub1_xdir_spec" name="sub1_xdir" value="spec" onclick="sub1_dir_set(this);">Parallel to street</td>
+                    </tr></table>
+            </div>
+            <div id="sub1_content-2" style="position: absolute; display: none; top: 50px; width: 700px; height: 400px; background-color: #a0a0a0;">
 
-<div id="sub1main_content-3" style="position: absolute; display: none; top: 50px; width: 700px; height: 400px; background-color: #808080;">
-</div>
+                <dir style="border:1px solid gray; margin: 4px;">
+                    <h4>Direction specification:</h4>
+                    <table style="width: 100%; margin: 8px;"><tr>
+                        <td><input type="radio" id="sub1_ydir_unspec" name="sub1_ydir" checked value="unspec" onclick="sub1_dir_set(this);">Unspecified direction</td>
+                        <td><input type="radio" id="sub1_ydir_spec" name="sub1_ydir" value="spec" onclick="sub1_dir_set(this);">Perpendicular to street</td>
+                    </tr></table>
+                </div>
+            </div>
 
-<div id="sub1main_content-4" style="position: absolute; display: none; top: 50px; width: 700px; height: 400px; background-color: #606060;">
-</div>
-
-</div>
-
-    <div id="main_content-2" style="position: absolute; display: none; top: 0px; width: 800px; height: 500px; background-color: #ccffcc; /* green */">
+            <div id="main_content-2" style="position: absolute; display: none; top: 0px; width: 800px; height: 500px; background-color: #ccffcc; /* green */">
 green
-</div>
-    <div id="main_content-3" style="position: absolute; display: none; top: 0px; width: 800px; height: 500px; background-color: #ffe6cc; /* orange */">
+            </div>
+            <div id="main_content-3" style="position: absolute; display: none; top: 0px; width: 800px; height: 500px; background-color: #ffe6cc; /* orange */">
 orange
-</div>
-    <div id="main_content-4" style="position: absolute; display: none; top: 0px; width: 800px; height: 500px; background-color: #ffccff; /*violet*/">
+            </div>
+            <div id="main_content-4" style="position: absolute; display: none; top: 0px; width: 800px; height: 500px; background-color: #ffccff; /*violet*/">
 violet
+            </div>
+            <div style="position: absolute; bottom: 0px; margin: 8px;" >
+                <p>Taxonomy string for this building typology: </p>
+                <p><input id="taxonomy" type="text"></input></p>
+                <p><input id="omit_unkown" type="checkbox">Omit code if corresponding parameter in unknown</p>
+           </div>
+      </div>
 </div>
-
-<div style="position: absolute; bottom: 0px; margin: 8px;" >
-    <p>Taxonomy string for this building typology: </p>
-    <p><input id="taxonomy" type="text"></input></p>
-    <p><input id="omit_unkown" type="checkbox">Omit code if corresponding parameter in unknown</p>
-</div>
-    <div>
 <h1></h1>
 
 
